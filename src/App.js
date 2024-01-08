@@ -1,8 +1,7 @@
 import './App.css';
 import { useIsDevCycleInitialized, withDevCycleProvider } from '@devcycle/react-client-sdk';
 import ToggleBot from './components/ToggleBot';
-import User from './components/User';
-import users from './data/users'
+import Description from './components/Description';
 
 if (!process.env.REACT_APP_DEVCYCLE_CLIENT_SDK_KEY) {
   alert('Set your REACT_APP_DEVCYCLE_CLIENT_SDK_KEY environment variable to use the DevCycle React SDK.')
@@ -18,29 +17,24 @@ function App() {
 
   const appContent = devcycleReady
     ? (
-        <>
+        <div className="App-wrapper">
           <ToggleBot />
-          <User />
-        </>
+          <Description />
+        </div>
       )
-    : <h2>Loading...</h2>
+    : <h2>Initializing...</h2>
 
   return (
     <div className="App">
-      {appContent}
-      <div>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://docs.devcycle.com/sdk/client-side-sdks/react/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          DevCycle React SDK Docs
-        </a>
+      <div className="App-header">
+        <p>Demo Application</p>
+        <img
+          height="46"
+          src="/devcycle-togglebot-full-colour.svg"
+          alt="DevCycle"
+        />
       </div>
+      {appContent}
     </div>
   );
 }
@@ -53,10 +47,15 @@ function App() {
  */
 export default withDevCycleProvider({
   sdkKey: process.env.REACT_APP_DEVCYCLE_CLIENT_SDK_KEY,
-  user: users[0], // initialize with user-1
+  /**
+   * Modify this user object to see how targeting is affected
+   */
+  user: {
+    user_id: 'user123',
+    name: 'Jane Doe',
+    email: 'jane.doe@email.com'
+  },
   options: {
     logLevel: 'debug',
-    // This is added for demo purposes. The default 10s is sufficent for most apps
-    eventFlushIntervalMS: 1000
   }
 })(App);
